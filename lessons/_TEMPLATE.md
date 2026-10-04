@@ -5,6 +5,8 @@ Writing rules for every lesson:
 - At least two "⏸️ Pause and think" boxes, with the answer inside <details>.
 - Charts need explicit colors: %%{init: {"themeVariables": {"xyChart": {"plotColorPalette": "#2563eb"}}}}%%
 - Every number in the text must match the code, the tests or a real run.
+- Public methods document every <param> and <returns>: what it means in the scenario, its unit, its constraints.
+  The build enforces missing comments (GenerateDocumentationFile): keep it at 0 warnings.
 -->
 
 # NN — Lesson Title

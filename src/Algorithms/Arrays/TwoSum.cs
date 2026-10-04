@@ -12,6 +12,16 @@ public static class TwoSum
     /// <summary>
     /// Tries every pair. Time O(n²), space O(1).
     /// </summary>
+    /// <param name="amounts">
+    /// The amounts of the open invoices, in cents, in any order.
+    /// They can be negative (credit notes) and can repeat.
+    /// </param>
+    /// <param name="target">The amount of the payment to reconcile, in cents (e.g. 125000 for 1,250.00 EUR).</param>
+    /// <returns>
+    /// <c>Pair</c>: the positions in <paramref name="amounts"/> of two different items whose sum is
+    /// exactly <paramref name="target"/>, or <c>null</c> if no such pair exists.
+    /// <c>Steps</c>: how many pairs were checked.
+    /// </returns>
     public static (PairResult? Pair, int Steps) BruteForce(IReadOnlyList<int> amounts, int target)
     {
         var steps = 0;
@@ -35,6 +45,16 @@ public static class TwoSum
     /// For each amount, asks "have I already seen the amount that completes it?".
     /// A dictionary answers in O(1) on average, so the whole search is O(n) on average. Space O(n).
     /// </summary>
+    /// <param name="amounts">
+    /// The amounts of the open invoices, in cents, in any order.
+    /// They can be negative (credit notes) and can repeat.
+    /// </param>
+    /// <param name="target">The amount of the payment to reconcile, in cents (e.g. 125000 for 1,250.00 EUR).</param>
+    /// <returns>
+    /// <c>Pair</c>: the positions in <paramref name="amounts"/> of two different items whose sum is
+    /// exactly <paramref name="target"/>, or <c>null</c> if no such pair exists.
+    /// <c>Steps</c>: how many amounts were processed (one dictionary lookup each).
+    /// </returns>
     public static (PairResult? Pair, int Steps) WithDictionary(IReadOnlyList<int> amounts, int target)
     {
         // amount already seen -> its index
@@ -60,8 +80,17 @@ public static class TwoSum
     /// <summary>
     /// Works on amounts sorted in ascending order: one pointer starts from the smallest,
     /// one from the largest, and they move towards each other. Time O(n), space O(1).
-    /// The indices refer to the sorted list.
     /// </summary>
+    /// <param name="sortedAmounts">
+    /// The amounts of the open invoices, in cents, <b>sorted in ascending order</b>
+    /// (e.g. loaded with <c>ORDER BY amount</c>). If they aren't sorted, valid pairs can be missed.
+    /// </param>
+    /// <param name="target">The amount of the payment to reconcile, in cents (e.g. 125000 for 1,250.00 EUR).</param>
+    /// <returns>
+    /// <c>Pair</c>: the positions in <paramref name="sortedAmounts"/> (the sorted list, not any original list)
+    /// of two different items whose sum is exactly <paramref name="target"/>, or <c>null</c> if no such pair exists.
+    /// <c>Steps</c>: how many sums were computed (at most n - 1).
+    /// </returns>
     public static (PairResult? Pair, int Steps) WithTwoPointers(IReadOnlyList<int> sortedAmounts, int target)
     {
         var left = 0;

@@ -8,8 +8,16 @@ public static class ThreeSum
     /// <summary>
     /// Sorts the values, fixes the first item of the triple and searches the other two
     /// with two pointers. Time O(n²), extra space O(n) for the sorted copy.
-    /// Each triple is returned in ascending order, and no triple appears twice.
     /// </summary>
+    /// <param name="values">
+    /// The ledger entries, in cents, in any order. Positive values are charges, negative values are refunds;
+    /// they can repeat. The list is not modified: the method sorts a copy.
+    /// </param>
+    /// <param name="target">The total the three entries must reach, in cents: 0 to find entries that balance out.</param>
+    /// <returns>
+    /// Every distinct triple of values (not positions) whose sum is exactly <paramref name="target"/>,
+    /// each in ascending order (<c>A ≤ B ≤ C</c>). No triple appears twice; empty if there are none.
+    /// </returns>
     public static IReadOnlyList<(int A, int B, int C)> FindAll(IReadOnlyList<int> values, int target)
     {
         var sorted = values.Order().ToArray();

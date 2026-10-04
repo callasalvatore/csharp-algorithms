@@ -8,8 +8,22 @@ public static class KSum
     /// <summary>
     /// Fixes one value and solves the same problem for k - 1 values on the rest,
     /// until only 2 values are left: then it uses two pointers.
-    /// Time O(n^(k-1)), plus O(n log n) to sort. Each combination is in ascending order and unique.
+    /// Time O(n^(k-1)) for k ≥ 3; for k = 2 the O(n log n) sort dominates.
     /// </summary>
+    /// <param name="values">
+    /// The amounts to combine, in cents, in any order. They can be negative and can repeat.
+    /// The list is not modified: the method sorts a copy.
+    /// </param>
+    /// <param name="k">How many values each combination must contain. Must be at least 2.</param>
+    /// <param name="target">
+    /// The total each combination must reach, in cents. It's a <c>long</c> because the sum of
+    /// k <c>int</c> values can exceed the <c>int</c> range.
+    /// </param>
+    /// <returns>
+    /// Every distinct combination of <paramref name="k"/> values (not positions) whose sum is exactly
+    /// <paramref name="target"/>, each sorted in ascending order. No combination appears twice; empty if there are none.
+    /// </returns>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="k"/> is less than 2.</exception>
     public static IReadOnlyList<int[]> FindAll(IReadOnlyList<int> values, int k, long target)
     {
         ArgumentOutOfRangeException.ThrowIfLessThan(k, 2);
