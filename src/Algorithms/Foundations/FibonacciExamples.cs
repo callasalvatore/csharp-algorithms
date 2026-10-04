@@ -10,6 +10,14 @@ public static class FibonacciExamples
     /// The textbook recursive definition: fib(n) = fib(n - 1) + fib(n - 2).
     /// Every call makes two more calls, so the work roughly doubles at each n → O(2ⁿ).
     /// </summary>
+    /// <param name="n">
+    /// The position in the sequence, starting from fib(0) = 0, fib(1) = 1.
+    /// Keep it small (≤ 35): the number of calls explodes.
+    /// </param>
+    /// <returns>
+    /// <c>Value</c>: the n-th Fibonacci number.
+    /// <c>Calls</c>: how many times the recursive function was called.
+    /// </returns>
     public static (long Value, long Calls) Recursive(int n)
     {
         long calls = 0;
@@ -26,6 +34,14 @@ public static class FibonacciExamples
     /// <summary>
     /// Walks forward keeping only the last two values. Time O(n), space O(1).
     /// </summary>
+    /// <param name="n">
+    /// The position in the sequence, starting from fib(0) = 0, fib(1) = 1.
+    /// Up to 92: fib(93) doesn't fit in a <c>long</c>.
+    /// </param>
+    /// <returns>
+    /// <c>Value</c>: the n-th Fibonacci number.
+    /// <c>Steps</c>: how many loop iterations were needed (n - 1 for n ≥ 2).
+    /// </returns>
     public static (long Value, int Steps) Iterative(int n)
     {
         if (n < 2)

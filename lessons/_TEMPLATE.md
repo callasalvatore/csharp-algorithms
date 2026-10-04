@@ -5,11 +5,17 @@ Writing rules for every lesson:
 - At least two "⏸️ Pause and think" boxes, with the answer inside <details>.
 - Charts need explicit colors: %%{init: {"themeVariables": {"xyChart": {"plotColorPalette": "#2563eb"}}}}%%
 - Every number in the text must match the code, the tests or a real run.
+- Side topics that aren't the algorithm (money types, hashing, overflow...) go in the appendix: keep a 2–3 line
+  note in the lesson, followed by "🔎 Deep dive: [Appendix X — Title](../../appendix/X-title.md)".
+- Public methods document every <param> and <returns>: what it means in the scenario, its unit, its constraints.
+  The build enforces missing comments (GenerateDocumentationFile): keep it at 0 warnings.
 -->
 
 # NN — Lesson Title
 
-**Difficulty:** ★☆☆ / ★★☆ / ★★★ · **Module:** N — Module name · **Time:** ~XX minutes
+| Difficulty | Module | Time |
+|------------|--------|------|
+| ★☆☆ Foundation / ★★☆ Intermediate / ★★★ Advanced — for two levels: `★☆☆ Foundation (sections 1–5) → ★★☆ Intermediate (sections 6–8)` | [N — Module name](../../README.md#module-n--module-name) | ~XX minutes |
 
 **Prerequisites:** lessons or concepts the reader needs (with links).
 
@@ -29,7 +35,21 @@ The questions to ask yourself (or the interviewer) before writing any code: inpu
 
 ## 3. Think First
 
-> Try to solve it before reading on. Open the hints one at a time.
+Never just say "try to solve it": restate the exercise so it can be done without scrolling back.
+
+> [!IMPORTANT]
+> **Your task:** what to write, in one sentence.
+>
+> ```csharp
+> // the method signature, with a comment on each parameter (meaning and unit)
+> ```
+>
+> | Input | Expected output |
+> |-------|-----------------|
+> | the lesson's example | its result |
+> | an edge case | its result, with a short why |
+
+The goals, from "any correct solution" to the target complexity, then the hints:
 
 <details>
 <summary>Hint 1</summary>

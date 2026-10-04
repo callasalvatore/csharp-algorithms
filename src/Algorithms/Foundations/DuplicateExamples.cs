@@ -10,6 +10,11 @@ public static class DuplicateExamples
     /// Compares every pair of items with two nested loops.
     /// Time O(n²): about n²/2 comparisons. Space O(1): no extra memory.
     /// </summary>
+    /// <param name="items">The values to check, e.g. customer ids.</param>
+    /// <returns>
+    /// <c>HasDuplicates</c>: true if at least one value appears more than once.
+    /// <c>Comparisons</c>: how many pairs were compared before answering.
+    /// </returns>
     public static (bool HasDuplicates, long Comparisons) WithNestedLoops(IReadOnlyList<int> items)
     {
         long comparisons = 0;
@@ -30,8 +35,13 @@ public static class DuplicateExamples
 
     /// <summary>
     /// Remembers the items already seen in a HashSet, whose lookups take O(1) on average.
-    /// Time O(n): one step per item. Space O(n): the set can grow up to n items.
+    /// Time O(n) on average: one step per item. Space O(n): the set can grow up to n items.
     /// </summary>
+    /// <param name="items">The values to check, e.g. customer ids.</param>
+    /// <returns>
+    /// <c>HasDuplicates</c>: true if at least one value appears more than once.
+    /// <c>Steps</c>: how many items were processed before answering.
+    /// </returns>
     public static (bool HasDuplicates, long Steps) WithHashSet(IReadOnlyList<int> items)
     {
         var seen = new HashSet<int>();

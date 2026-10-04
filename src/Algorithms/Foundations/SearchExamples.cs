@@ -9,6 +9,12 @@ public static class SearchExamples
     /// <summary>
     /// Checks the items one by one. Worst case: n steps → O(n).
     /// </summary>
+    /// <param name="items">The values to search, in any order.</param>
+    /// <param name="target">The value to look for.</param>
+    /// <returns>
+    /// <c>Index</c>: the position of the first item equal to <paramref name="target"/>, or -1 if there is none.
+    /// <c>Steps</c>: how many items were checked.
+    /// </returns>
     public static (int Index, int Steps) LinearSearch(IReadOnlyList<int> items, int target)
     {
         var steps = 0;
@@ -27,6 +33,12 @@ public static class SearchExamples
     /// Works on a sorted list: looks at the middle and discards half of the
     /// remaining items at every step. Worst case: about log2(n) steps → O(log n).
     /// </summary>
+    /// <param name="sortedItems">The values to search, sorted in ascending order. If they aren't sorted, the result is meaningless.</param>
+    /// <param name="target">The value to look for.</param>
+    /// <returns>
+    /// <c>Index</c>: the position of an item equal to <paramref name="target"/>, or -1 if there is none.
+    /// <c>Steps</c>: how many items were checked.
+    /// </returns>
     public static (int Index, int Steps) BinarySearch(IReadOnlyList<int> sortedItems, int target)
     {
         var steps = 0;
