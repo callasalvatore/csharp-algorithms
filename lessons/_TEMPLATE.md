@@ -9,7 +9,9 @@ Writing rules for every lesson:
 
 # NN — Lesson Title
 
-**Difficulty:** ★☆☆ / ★★☆ / ★★★ · **Module:** N — Module name · **Time:** ~XX minutes
+| Difficulty | Module | Time |
+|------------|--------|------|
+| ★☆☆ Foundation / ★★☆ Intermediate / ★★★ Advanced — for two levels: `★☆☆ Foundation (sections 1–5) → ★★☆ Intermediate (sections 6–8)` | [N — Module name](../../README.md#module-n--module-name) | ~XX minutes |
 
 **Prerequisites:** lessons or concepts the reader needs (with links).
 

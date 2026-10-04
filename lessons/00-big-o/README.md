@@ -1,6 +1,8 @@
 # 00 — How to Measure an Algorithm: Big-O in Practice
 
-**Difficulty:** ★☆☆ · **Module:** 0 — Foundations · **Time:** ~30 minutes
+| Difficulty | Module | Time |
+|------------|--------|------|
+| ★☆☆ Foundation | [0 — Foundations](../../README.md#module-0--foundations) | ~30 minutes |
 
 **Prerequisites:** C# loops, `List<T>`, `Dictionary<TKey, TValue>`, `HashSet<T>`.
 

@@ -17,7 +17,7 @@ Every lesson teaches *how to think* about the problem, not just the final answer
 | ★★☆ **Intermediate** | Combines two ideas, or needs a data structure you have to choose carefully. | 10 |
 | ★★★ **Advanced** | Non-obvious insight or tricky invariants. Expect to re-read and experiment. | 3 |
 
-Some lessons span two levels: the basic version is easier, the follow-up variations are harder (e.g. LRU is ★★☆, LFU is ★★★). They're counted at their starting level.
+Some lessons span two levels, written as **★☆☆ → ★★☆**: the first sections are at the starting level, the later ones (variations and follow-ups) at the higher one. Each lesson says which sections belong to which level, so you can stop at the end of the first part and come back later. In the table above, these lessons are counted at their starting level.
 
 ---
 
