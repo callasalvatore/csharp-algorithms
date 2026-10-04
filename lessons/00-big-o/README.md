@@ -110,7 +110,7 @@ These are the 6 complexities you'll meet in this course, from best to worst, eac
 
 ```mermaid
 flowchart TB
-    O1["<b>O(1)</b> — constant<br/>dictionary[key], array[i]"]:::great
+    O1["<b>O(1)</b> — constant<br/>array[i], dictionary[key] (on average)"]:::great
     Olog["<b>O(log n)</b> — logarithmic<br/>binary search on a sorted list"]:::great
     On["<b>O(n)</b> — linear<br/>a foreach over a list, list.Contains(x)"]:::good
     Onlog["<b>O(n log n)</b> — linearithmic<br/>list.Sort(), OrderBy()"]:::ok
@@ -245,7 +245,7 @@ Big-O also describes **how much extra memory** an algorithm needs. The two dupli
 | Version       | Time   | Extra memory | Why                                  |
 |---------------|--------|--------------|--------------------------------------|
 | Nested loops  | O(n²)  | **O(1)**     | only two index variables             |
-| HashSet       | O(n)   | **O(n)**     | the set can hold up to n items       |
+| HashSet       | O(n) average | **O(n)** | the set can hold up to n items |
 
 ```mermaid
 flowchart TB
@@ -320,7 +320,7 @@ A single `Add` can be slow (O(n), when it copies), but copies are rare: after 17
 
 ## 10. 🧪 Try It: Measure It Yourself
 
-Seeing is believing. The [BigOExperiment](../../experiments/BigOExperiment/Program.cs) project searches 1,000 missing values in a `List` (O(n)) and in a `HashSet` (O(1)):
+Seeing is believing. The [BigOExperiment](../../experiments/BigOExperiment/Program.cs) project searches 1,000 missing values in a `List` (O(n)) and in a `HashSet` (O(1) on average):
 
 ```bash
 dotnet run -c Release --project experiments/BigOExperiment
@@ -354,9 +354,10 @@ Every lesson ends with a table like this one:
 | Approach    | Time        | Space | Why                                        |
 |-------------|-------------|-------|--------------------------------------------|
 | Brute force | O(n²)       | O(1)  | compares every pair                        |
-| Optimized   | O(n)        | O(n)  | one pass, remembers seen values in a set   |
+| Optimized   | O(n) average | O(n) | one pass, remembers seen values in a set   |
 
 - **Time** and **Space** are the worst case, unless the lesson says "average" or "amortized".
+- Lookups in a `Dictionary` or a `HashSet` are **O(1) on average**: in rare cases they can be slower, as [lesson 01](../01-two-sum/README.md#5-the-better-idea-remember-what-youve-seen) explains. That's why algorithms built on them are marked "average".
 - **n** is the size of the input. When there are two inputs, we use two letters (e.g. `O(n + m)`, or `O(n log k)` for "n items, keep the top k").
 - The **Why** column is the important one: if you understand the reason, you'll remember the complexity.
 
@@ -374,7 +375,7 @@ Try to answer before opening each solution.
 <details>
 <summary>Answer</summary>
 
-**O(n)**: `n` iterations × O(1) per lookup.
+**O(n) on average**: `n` iterations × O(1) average per lookup.
 
 </details>
 
