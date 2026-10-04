@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BigOExperiment", "experimen
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoneyExperiment", "experiments\MoneyExperiment\MoneyExperiment.csproj", "{5A1C00A5-DBE5-422A-BD70-917EEA424A17}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SortingExperiment", "experiments\SortingExperiment\SortingExperiment.csproj", "{160D7E14-E3FB-4D8A-9911-DE9C6DF08A40}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{5A1C00A5-DBE5-422A-BD70-917EEA424A17}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5A1C00A5-DBE5-422A-BD70-917EEA424A17}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5A1C00A5-DBE5-422A-BD70-917EEA424A17}.Release|Any CPU.Build.0 = Release|Any CPU
+		{160D7E14-E3FB-4D8A-9911-DE9C6DF08A40}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{160D7E14-E3FB-4D8A-9911-DE9C6DF08A40}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{160D7E14-E3FB-4D8A-9911-DE9C6DF08A40}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{160D7E14-E3FB-4D8A-9911-DE9C6DF08A40}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -48,5 +54,6 @@ Global
 		{51BCA797-6802-4831-B5D3-4719E8BAFD20} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
 		{4BFCDF15-B2BF-46B0-AA12-C92F8FF346F2} = {8E1D1CCC-9289-C849-48CA-D7E099D02B6F}
 		{5A1C00A5-DBE5-422A-BD70-917EEA424A17} = {8E1D1CCC-9289-C849-48CA-D7E099D02B6F}
+		{160D7E14-E3FB-4D8A-9911-DE9C6DF08A40} = {8E1D1CCC-9289-C849-48CA-D7E099D02B6F}
 	EndGlobalSection
 EndGlobal

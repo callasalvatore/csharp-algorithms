@@ -143,6 +143,7 @@ Deep dives into topics that come up in several lessons but aren't algorithms the
 | B | How a Dictionary Works: hashing, collisions, why lookups are O(1) on average | 📝 |
 | C | Integer Overflow: how an `int` wraps around, `checked`, when to use `long` | 📝 |
 | D | Testing Against a Brute Force: slow-but-correct referees, random inputs | 📝 |
+| E | [How Sorting Works](appendix/E-how-sorting-works.md): insertion sort, merge sort, what .NET uses, stability | ✅ |
 
 See the [appendix index](appendix/README.md) for which lessons use each one.
 

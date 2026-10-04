@@ -380,7 +380,7 @@ The tests do this for Two Sum (500 random inputs), 3Sum (300) and 4Sum (200).
 - **`Dictionary.TryGetValue`** does the lookup and returns the value in **one** search. `ContainsKey` followed by `dict[key]` searches twice.
 - **`Dictionary.TryAdd`** adds only if the key is missing: here it keeps the **first** index when an amount appears twice.
 - **`HashSet<T>`** is enough when you only need *"does a pair exist?"* and not the positions.
-- **`Enumerable.Order()`** (.NET 7+) and **`Array.Sort`** sort in O(n log n).
+- **`Enumerable.Order()`** (.NET 7+) and **`Array.Sort`** sort in O(n log n). 🔎 **Deep dive:** [Appendix E — How Sorting Works](../../appendix/E-how-sorting-works.md) explains where that cost comes from, and why `Array.Sort` and `OrderBy` don't treat equal items the same way.
 
 ---
 
