@@ -62,7 +62,31 @@ Questions to ask yourself (or the interviewer) before writing code:
 
 ## 3. Think First
 
-> Try to solve it before reading on. Open the hints one at a time.
+Before reading the solution, try to write it yourself.
+
+> [!IMPORTANT]
+> **Your task:** write a method that receives the amounts of the open invoices and the amount of the payment, and returns the **positions of the two invoices** that add up to the payment, or `null` if there are none.
+>
+> ```csharp
+> // amounts: the open invoices, in cents. target: the payment, in cents.
+> (int First, int Second)? FindPair(int[] amounts, int target)
+> ```
+>
+> | Input | Expected output |
+> |-------|-----------------|
+> | `amounts = [31000, 47500, 82000, 15500, 43000]`, `target = 125000` | `(2, 4)`: INV-3 + INV-5 |
+> | `amounts = [31000, 47500]`, `target = 100000` | `null` |
+> | `amounts = [30000]`, `target = 60000` | `null`: the same invoice can't be used twice |
+
+Work on paper or in a small console app, and aim for two goals, one at a time:
+
+```mermaid
+flowchart TB
+    G1["🎯 Goal 1: any correct solution<br/>(it's fine if it's slow)"] --> G2["🎯 Goal 2: look at each invoice only once<br/>(O(n) on average)"]
+    G2 --> S["Then read on and compare<br/>your solution with sections 4 and 5"]
+```
+
+Stuck on goal 2? Open the hints one at a time.
 
 <details>
 <summary>Hint 1</summary>

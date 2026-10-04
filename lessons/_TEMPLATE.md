@@ -33,7 +33,21 @@ The questions to ask yourself (or the interviewer) before writing any code: inpu
 
 ## 3. Think First
 
-> Try to solve it before reading on. Open the hints one at a time.
+Never just say "try to solve it": restate the exercise so it can be done without scrolling back.
+
+> [!IMPORTANT]
+> **Your task:** what to write, in one sentence.
+>
+> ```csharp
+> // the method signature, with a comment on each parameter (meaning and unit)
+> ```
+>
+> | Input | Expected output |
+> |-------|-----------------|
+> | the lesson's example | its result |
+> | an edge case | its result, with a short why |
+
+The goals, from "any correct solution" to the target complexity, then the hints:
 
 <details>
 <summary>Hint 1</summary>
