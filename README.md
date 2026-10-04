@@ -133,11 +133,27 @@ The lessons are ordered so that each one only uses ideas from the previous ones.
 
 ---
 
+## 📎 Appendix
+
+Deep dives into topics that come up in several lessons but aren't algorithms themselves. Read them when a lesson points to them, or on their own.
+
+| | Appendix | Status |
+|---|----------|--------|
+| A | [Money in Code](appendix/A-money-in-code.md): `double` vs `decimal` vs integer cents, rounding, splitting amounts | ✅ |
+| B | How a Dictionary Works: hashing, collisions, why lookups are O(1) on average | 📝 |
+| C | Integer Overflow: how an `int` wraps around, `checked`, when to use `long` | 📝 |
+| D | Testing Against a Brute Force: slow-but-correct referees, random inputs | 📝 |
+
+See the [appendix index](appendix/README.md) for which lessons use each one.
+
+---
+
 ## 🗂️ Repository Structure
 
 ```
 csharp-algorithms/
 ├── lessons/                  one folder per lesson, with its README (the lesson itself)
+├── appendix/                 deep dives shared by several lessons
 ├── src/Algorithms/           the solutions, one folder per module
 ├── tests/Algorithms.Tests/   xUnit tests, mirroring the src structure
 └── experiments/              small runnable programs used by the "Try it" sections

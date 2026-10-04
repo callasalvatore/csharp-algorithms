@@ -40,7 +40,9 @@ flowchart TB
 **The statement:** given a list of amounts and a target, find **two different items** whose sum is exactly the target, and return their positions. If no pair exists, say so.
 
 > [!NOTE]
-> **Why amounts are in cents.** The code stores 1,250.00 EUR as the `int` `125000`. Money should never live in a `double`: in C#, `0.1 + 0.2 == 0.3` is **false**, because binary floating point can't represent those values exactly. `decimal` is exact and fine for business code; integer cents are what most payment APIs use, and what you'll see in interviews.
+> **Why amounts are in cents.** The code stores 1,250.00 EUR as the `int` `125000`. Money should never live in a `double`: in C#, `0.1 + 0.2 == 0.3` is **false**, and with `double` amounts this very algorithm can miss a pair that exists. Integer cents are exact, and they're what you'll see in interviews.
+>
+> 🔎 **Deep dive:** [Appendix A — Money in Code](../../appendix/A-money-in-code.md) shows the bug in action, compares `double`, `decimal` and cents, and explains rounding and how to split an amount without losing a cent.
 
 ---
 
