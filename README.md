@@ -89,7 +89,7 @@ The lessons are ordered so that each one only uses ideas from the previous ones.
 
 | # | Lesson | Difficulty | Key ideas | Status |
 |---|--------|------------|-----------|--------|
-| 01 | Two Sum and its variations | ★☆☆ → ★★☆ | hash map, sorted array + two pointers, k-sum | 📝 |
+| 01 | [Two Sum and its variations](lessons/01-two-sum/README.md) | ★☆☆ → ★★☆ | hash map, sorted array + two pointers, k-sum | ✅ |
 | 02 | Maximum Subarray Sum | ★☆☆ | Kadane's algorithm, variations (indices, circular, product) | 📝 |
 | 03 | Trapping Rain Water | ★★★ | prefix max, two pointers, monotonic stack | 📝 |
 
