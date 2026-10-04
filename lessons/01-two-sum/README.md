@@ -11,13 +11,14 @@
 - how a `Dictionary` turns an O(n²) search into O(n) by **remembering what you've seen**
 - the **two pointers** technique on sorted data, and *why* it never misses a solution
 - how to extend the idea from 2 numbers to 3, and then to any `k`
+- how a small change in the requirements (*exactly* two invoices, or *any number*) changes the difficulty completely
 - how to test a fast algorithm against a slow, obviously correct one
 
 ---
 
 ## 1. The Problem
 
-You work on the accounting software of a small company. A bank transfer of **1,250.00 EUR** has just arrived, with no reference. The customer has five open invoices:
+You work on the accounting software of a small company. A bank transfer of **1,250.00 EUR** has just arrived, without the invoice numbers in the reference. The customer emails the accounting team: *"this payment settles two of your invoices"*, but doesn't say which ones. The customer has five open invoices:
 
 | Invoice | Amount     |
 |---------|-----------:|
@@ -49,10 +50,11 @@ Questions to ask yourself (or the interviewer) before writing code:
 
 | Question | Our answer |
 |----------|-----------|
+| How many invoices does the payment settle? | **Exactly two**: the customer told us (section 8 shows what changes otherwise) |
 | Can the same invoice be used twice? | **No**: two *different* items |
 | Can two invoices have the same amount? | **Yes**: 300 + 300 = 600 is valid with two 300s |
 | Can amounts be negative? | **Yes**: credit notes |
-| What if several pairs match? | Return any one of them |
+| What if several pairs match? | The algorithm returns one of them. In real reconciliation, several matches mean the payment is **ambiguous**: it should go to a person to check (see exercise 2) |
 | What if none matches? | Return `null` |
 | Is the list sorted? | Not in general: we'll see both cases |
 
@@ -85,7 +87,7 @@ Try every pair. It's the same shape as the duplicate check in lesson 00:
 ```csharp
 for (var i = 0; i < amounts.Count; i++)
     for (var j = i + 1; j < amounts.Count; j++)
-        if ((long)amounts[i] + amounts[j] == target)
+        if ((long)amounts[i] + amounts[j] == target)   // long: see "Common Mistakes"
             return new PairResult(i, j);
 ```
 
@@ -97,7 +99,7 @@ It's correct and simple. But with `n` invoices it checks up to **n × (n − 1) 
 | 1,000         | 499,500        |
 | 100,000       | ~5 billion     |
 
-A company with 100,000 open invoices would wait seconds for every single transfer.
+Five invoices are no problem. But when the bank can't tell us **who** sent the money, we have to search the open invoices of **every** customer. With 100,000 of them, each unidentified transfer would take seconds.
 
 ---
 
@@ -127,6 +129,9 @@ Here's the trace for the 1,250.00 EUR transfer:
 
 One pass, one dictionary lookup per invoice: **O(n)** time, **O(n)** memory for the dictionary.
 
+> [!NOTE]
+> A dictionary lookup is O(1) **on average**. In the worst case, if many keys end up in the same internal bucket (a *hash collision*), a lookup can cost O(n). With integer keys and .NET's `Dictionary` this practically never happens, so the dictionary version is O(n) **on average** and O(n²) in the theoretical worst case. That's the convention you'll see in the complexity tables of this course.
+
 ### ⏸️ Pause and think
 
 In the loop, we **first** look up the missing amount, **then** add the current one to the dictionary. What would go wrong if we did it the other way around?
@@ -152,7 +157,7 @@ xychart-beta
 
 The [tests](../../tests/Algorithms.Tests/Arrays/TwoSumTests.cs) check the exact numbers: with 1,000 invoices and no match, the brute force does **499,500** steps, the dictionary **1,000**.
 
-📌 **In a nutshell:** instead of *searching* for the partner of each item, *remember* the items you've seen and *look up* the partner in O(1).
+📌 **In a nutshell:** instead of *searching* for the partner of each item, *remember* the items you've seen and *look up* the partner in O(1) on average.
 
 ---
 
@@ -164,14 +169,14 @@ Yes, with **two pointers**: one on the smallest amount, one on the largest.
 
 ```mermaid
 flowchart TB
-    S["left = smallest, right = largest"] --> C{"amount[left] + amount[right]"}
+    S["left = smallest, right = largest"] --> E{"left < right?<br/>(still two different items)"}
+    E -->|yes| C{"amount[left] + amount[right]"}
+    E -->|no| N["❌ No pair"]
     C -->|"= target"| F["✅ Found"]
     C -->|"< target"| L["Too small:<br/>move left one step right"]
     C -->|"> target"| R["Too big:<br/>move right one step left"]
-    L --> E{"left < right?"}
+    L --> E
     R --> E
-    E -->|yes| C
-    E -->|no| N["❌ No pair"]
 ```
 
 Trace with the sorted invoices and a transfer of **905.00 EUR**:
@@ -259,7 +264,31 @@ flowchart TB
     K3 --> K2["2Sum on the rest: two pointers"]
 ```
 
-Every level adds a loop over `n` values, so k-Sum costs **O(n^(k−1))**: O(n) for 2Sum on sorted data, O(n²) for 3Sum, O(n³) for 4Sum. See [KSum.cs](../../src/Algorithms/Arrays/KSum.cs): the recursion and the duplicate skipping are the same ideas as 3Sum, written once for every `k`.
+Every level adds a loop over `n` values, so for k ≥ 3 k-Sum costs **O(n^(k−1))**: O(n²) for 3Sum, O(n³) for 4Sum. For k = 2 the search itself is O(n), but the method sorts the input first, so the total is O(n log n). See [KSum.cs](../../src/Algorithms/Arrays/KSum.cs): the recursion and the duplicate skipping are the same ideas as 3Sum, written once for every `k`.
+
+### ⏸️ What if we don't know how many invoices?
+
+So far the customer told us *how many* invoices the payment settles. In real life, that's often not the case: a transfer can pay one invoice, two, five... or only part of one. Look at how the difficulty changes with this single detail:
+
+```mermaid
+flowchart TB
+    A["<b>1 invoice</b><br/>look up the amount in a dictionary<br/>O(1) on average"]:::easy
+    B["<b>Exactly 2 invoices</b><br/>Two Sum<br/>O(n)"]:::easy
+    C["<b>Exactly k invoices</b><br/>k-Sum<br/>O(n^(k−1))"]:::medium
+    D["<b>Any number of invoices</b><br/>Subset Sum<br/>O(2ⁿ) by trying every combination"]:::hard
+    E["<b>A partial payment</b><br/>no exact combination exists:<br/>a business rule decides<br/>(e.g. settle the oldest invoice first)"]:::rule
+
+    A --> B --> C --> D --> E
+
+    classDef easy fill:#dcfce7,stroke:#16a34a,color:#000
+    classDef medium fill:#fef9c3,stroke:#ca8a04,color:#000
+    classDef hard fill:#fecaca,stroke:#dc2626,color:#000
+    classDef rule fill:#e0e7ff,stroke:#4f46e5,color:#000
+```
+
+With **any number** of invoices, every invoice can be *in* or *out* of the combination: that's 2ⁿ possibilities, the exponential growth of [lesson 00](../00-big-o/README.md#8-the-exponential-trap-o2ⁿ). With 30 open invoices that's over a billion combinations. No known algorithm solves this problem fast in every case, but when the amounts are non-negative integers (like cents) and the target isn't huge, **dynamic programming** solves it in O(n × target), an idea you'll meet in Module 6.
+
+📌 **In a nutshell:** "exactly two" isn't a detail. Knowing how many items you're looking for is what makes the problem easy.
 
 ---
 
@@ -268,10 +297,12 @@ Every level adds a loop over `n` values, so k-Sum costs **O(n^(k−1))**: O(n) f
 | Approach                         | Time          | Extra space | Why |
 |----------------------------------|---------------|-------------|-----|
 | Two Sum, brute force             | O(n²)         | O(1)        | tries every pair |
-| Two Sum, dictionary              | O(n)          | O(n)        | one pass, O(1) lookup per item |
-| Two Sum, two pointers (sorted)   | O(n)          | O(1)        | each step discards one item |
+| Two Sum, dictionary              | O(n) average  | O(n)        | one pass, O(1) average lookup per item |
+| Two Sum, two pointers (sorted)   | O(n)          | O(1)        | each step discards one item; the input is already sorted |
 | 3Sum, sort + two pointers        | O(n²)         | O(n)        | n fixed values × O(n) search, plus a sorted copy |
-| k-Sum, sort + recursion          | O(n^(k−1))    | O(n)        | one loop per extra value |
+| k-Sum (k ≥ 3), sort + recursion  | O(n^(k−1))    | O(n)        | one loop per extra value |
+
+Space doesn't count the output: 3Sum and k-Sum can return many combinations.
 
 ---
 
@@ -298,11 +329,11 @@ flowchart TB
     R --> F["Fast version"]
     B --> C{"Same answer?"}
     F --> C
-    C -->|"500 times yes"| OK["✅ Confident"]
+    C -->|"yes, hundreds of times"| OK["✅ Confident"]
     C -->|"once no"| BUG["🐞 Bug found,<br/>with the input that causes it"]
 ```
 
-The tests do this for Two Sum, 3Sum and 4Sum.
+The tests do this for Two Sum (500 random inputs), 3Sum (300) and 4Sum (200).
 
 ---
 
@@ -330,9 +361,9 @@ The tests do this for Two Sum, 3Sum and 4Sum.
 ## 13. Practice
 
 1. ★ Return the **invoice codes** (`INV-3`, `INV-5`) instead of the indices, using a `record Invoice(string Code, int AmountInCents)`.
-2. ★★ **Count** how many different pairs add up to the target. With `[300, 300, 300]` and target 600 the answer is 3.
+2. ★★ **Count** how many different pairs add up to the target. With `[300, 300, 300]` and target 600 the answer is 3. In the reconciliation scenario, any count above 1 means the payment is ambiguous.
 3. ★★ **Closest sum**: on sorted data, find the pair whose sum is closest to the target when no exact match exists. *(Hint: two pointers, remember the best sum seen.)*
-4. ★★★ **4Sum in O(n²)** on average: store the sums of all pairs in a dictionary. What makes avoiding duplicates hard with this approach?
+4. ★★★ **Does a 4Sum exist, in O(n²) on average?** Store the sums of all pairs in a dictionary, then look for two pairs that complete each other. Watch out: the two pairs must not share an item. Why does listing *all* unique combinations this way get much harder?
 
 ---
 
@@ -343,7 +374,7 @@ The tests do this for Two Sum, 3Sum and 4Sum.
 <details>
 <summary>Answer</summary>
 
-The **dictionary**: O(n) time, and it works directly on the original positions.
+The **dictionary**: O(n) time on average, and it works directly on the original positions.
 
 </details>
 

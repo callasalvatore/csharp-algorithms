@@ -33,7 +33,7 @@ public static class TwoSum
 
     /// <summary>
     /// For each amount, asks "have I already seen the amount that completes it?".
-    /// A dictionary answers in O(1), so the whole search is O(n). Space O(n).
+    /// A dictionary answers in O(1) on average, so the whole search is O(n) on average. Space O(n).
     /// </summary>
     public static (PairResult? Pair, int Steps) WithDictionary(IReadOnlyList<int> amounts, int target)
     {
