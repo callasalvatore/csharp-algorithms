@@ -183,7 +183,7 @@ flowchart TB
     C --> D["O(n + k): n items, k possible values"]
 ```
 
-That's **counting sort**, and its cousin **bucket sort** is the key idea of [lesson 06 — Top K Frequent Elements](../README.md#module-3--heaps-and-priority-queues).
+That's **counting sort**, and its cousin **bucket sort** is the key idea of [lesson 06 — Top K Frequent Elements](../README.md#module-3-heaps-and-priority-queues).
 
 ---
 
