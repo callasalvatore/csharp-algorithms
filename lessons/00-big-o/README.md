@@ -2,7 +2,7 @@
 
 | Difficulty | Module | Time |
 |------------|--------|------|
-| ★☆☆ Foundation | [0 — Foundations](../../README.md#module-0--foundations) | ~30 minutes |
+| ★☆☆ Foundation | [0 — Foundations](../../README.md#module-0--foundations) | ~35 minutes |
 
 **Prerequisites:** C# loops, `List<T>`, `Dictionary<TKey, TValue>`, `HashSet<T>`.
 
@@ -19,7 +19,21 @@
 
 ## 1. Why We Need It
 
-Your app has a method that finds duplicate customers by comparing every pair. With 100 customers it answers instantly. Then the company grows, and the same method starts blocking the page for **minutes**.
+Here's a method you could find in any business application. It checks whether two customers registered with the same email:
+
+```csharp
+bool HasDuplicateEmails(List<Customer> customers)
+{
+    for (var i = 0; i < customers.Count; i++)
+        for (var j = i + 1; j < customers.Count; j++)    // compare every pair of customers
+            if (customers[i].Email == customers[j].Email)
+                return true;
+
+    return false;
+}
+```
+
+It's short, it's correct, and with 100 customers it answers instantly. Then the company grows, and the same method starts blocking the page for **minutes**.
 
 The computer didn't get slower. **The amount of work grew much faster than the data.**
 
@@ -104,9 +118,81 @@ About **30**. Every 10 halvings divide the size by roughly 1,000 (2¹⁰ = 1,024
 
 ---
 
-## 4. The Complexity Ladder
+## 4. Six Ways the Work Can Grow
 
-These are the 6 complexities you'll meet in this course, from best to worst, each with code you already write:
+You've already met O(n) and O(log n). The course uses four more. Here they are **one at a time**, each with a few lines of C# you probably write every week, and how much work it means for **1,000 items**.
+
+### O(1) — constant
+
+```csharp
+var first = orders[0];                  // reading an array or list element by index
+var customer = customersById[id];       // a Dictionary lookup (on average)
+```
+
+The work doesn't depend on the size: 10 orders or 10 million, it's the same. **1,000 items → 1 step.**
+
+### O(log n) — logarithmic
+
+```csharp
+var index = sortedIds.BinarySearch(id); // halves the list at every step (section 3)
+```
+
+The work grows very slowly. **1,000 items → about 10 steps.**
+
+### O(n) — linear
+
+```csharp
+decimal total = 0;
+foreach (var order in orders)           // one step per order
+    total += order.Amount;
+```
+
+Twice the items, twice the work. **1,000 items → 1,000 steps.**
+
+### O(n log n) — "linearithmic"
+
+```csharp
+orders.Sort();                          // or: orders.OrderBy(o => o.Date)
+```
+
+Sorting costs a little more than reading every item once: `n` times `log n`. **1,000 items → about 10,000 steps.** How sorting works, and why it costs exactly this much, is explained in [Appendix E](../../appendix/E-how-sorting-works.md).
+
+### O(n²) — quadratic
+
+```csharp
+foreach (var a in customers)
+    foreach (var b in customers)        // for each customer, look at every customer again
+        Compare(a, b);
+```
+
+A loop inside a loop over the same data: `n × n`. **1,000 items → 1,000,000 steps.** The `HasDuplicateEmails` of section 1 has the same shape: it skips the pairs it has already compared, so it does about n²/2 steps, but that's still O(n²), as [section 6](#6-two-rules-to-calculate-it-yourself) explains.
+
+### O(2ⁿ) — exponential
+
+```csharp
+long Fib(int n) => n < 2 ? n : Fib(n - 1) + Fib(n - 2);   // every call makes two more calls
+```
+
+Every time `n` grows by one, the work (roughly) **doubles**. It's typical of "try every combination" solutions: with 1,000 items there are 2¹⁰⁰⁰ combinations, **a number with 302 digits: it never finishes.** Section 8 takes this one apart.
+
+### ⏸️ Pause and think
+
+Which of the six is this code?
+
+```csharp
+var romans = customers.Where(c => c.City == "Rome").ToList();
+```
+
+<details>
+<summary>Answer</summary>
+
+**O(n)**: `Where` checks the condition on every customer once. LINQ hides the loop, but the loop is still there.
+
+</details>
+
+### Putting them together
+
+Here are the six side by side, from best to worst:
 
 ```mermaid
 flowchart TB
