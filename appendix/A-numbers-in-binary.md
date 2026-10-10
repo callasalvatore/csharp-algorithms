@@ -4,7 +4,7 @@
 |---------------|------|
 | none | about 30 minutes |
 
-Computers store every number as a sequence of 0s and 1s. This appendix starts from the way we already write numbers and builds up, one step at a time, to how a `double` is stored and why some numbers can't be stored exactly. It's the basis for [appendix C](C-money-in-code.md), which explains why `0.1 + 0.2 == 0.3` is false, and for appendix B, which follows a subtraction inside the processor.
+Computers store every number as a sequence of 0s and 1s. This appendix starts from the way we already write numbers and builds up, one step at a time, to how a `double` is stored and why some numbers can't be stored exactly.
 
 ## 1. What a digit is worth depends on where it is
 
