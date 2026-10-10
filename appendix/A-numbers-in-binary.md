@@ -15,9 +15,27 @@ When you read 1250, you don't just see four digits: you know that the 1 is worth
 | Digit | 1 | 2 | 5 | 0 |
 | Contribution | 1000 | 200 | 50 | 0 |
 
-1250 = 1000 + 200 + 50 + 0. This way of writing numbers is called positional notation, and the "ten" behind it is the base. Base 10 needs ten digits, from 0 to 9: when a position goes past 9, it goes back to 0 and the next position on the left grows by one (9 + 1 = 10).
+1250 = 1000 + 200 + 50 + 0. This way of writing numbers is called positional notation, and the "ten" behind it is the base.
 
-Nothing forces the base to be ten. In base 2 the rule is exactly the same, but each position is worth twice the one on its right, and there are only two digits, 0 and 1.
+Where do the position values come from? From counting. In base 10 the rightmost digit counts the units. When it goes past 9 there's no digit left, so it goes back to 0 and the digit on its left grows by one: 9 + 1 = 10. That second digit therefore counts groups of ten. When it goes past 9 too, the third digit starts counting groups of ten tens, that is a hundred. That's why the positions are worth 1, 10, 100, 1000: each one is ten times the previous one, because it takes ten of the previous kind to fill it.
+
+Nothing forces the base to be ten. Base 2 counts in exactly the same way, but it has only two digits, 0 and 1, so it runs out of digits much sooner, right after 1:
+
+| In base 10 | In base 2 | What happens |
+|---:|---:|---|
+| 0 | 0 | |
+| 1 | 1 | the rightmost digit is full: 1 is the last digit available |
+| 2 | 10 | it goes back to 0 and the next digit becomes 1: the second position counts twos |
+| 3 | 11 | both digits are full |
+| 4 | 100 | both go back to 0 and the third digit becomes 1: the third position counts fours |
+| 5 | 101 | |
+| 6 | 110 | |
+| 7 | 111 | three digits full |
+| 8 | 1000 | the fourth position counts eights |
+
+So in base 2 the positions are worth 1, 2, 4, 8, 16 and so on: each one is twice the previous one, because it takes two of the previous kind to fill it.
+
+Reading a number in base 2 works just like in base 10: multiply each digit by the value of its position, and add up.
 
 | Position value | 8 (2³) | 4 (2²) | 2 (2¹) | 1 (2⁰) |
 |---|---:|---:|---:|---:|
@@ -30,12 +48,12 @@ Computers use base 2 because their circuits work with two states, current or no 
 
 ### Stop and think
 
-What number is 1010₂? And how do you write 6 in base 2?
+What number is 1010₂? And if you continue the counting table, how do you write 9 in base 2?
 
 <details>
 <summary>Answer</summary>
 
-1010₂ = 8 + 0 + 2 + 0 = 10. And 6 = 4 + 2, so it's 110₂.
+1010₂ = 8 + 0 + 2 + 0 = 10. And 9 comes right after 8 = 1000₂: the rightmost digit goes from 0 to 1, so 9 = 1001₂. One more and the rightmost digit is full again, so it goes back to 0 and the next one becomes 1: 10 = 1010₂, which matches the first answer.
 
 </details>
 

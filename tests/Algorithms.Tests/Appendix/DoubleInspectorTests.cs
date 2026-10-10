@@ -11,6 +11,8 @@ public class DoubleInspectorTests
         Assert.Equal("1101", Convert.ToString(13, 2));
         Assert.Equal("1010", Convert.ToString(10, 2));
         Assert.Equal("110", Convert.ToString(6, 2));
+        Assert.Equal("1000", Convert.ToString(8, 2));
+        Assert.Equal("1001", Convert.ToString(9, 2));
         Assert.Equal("10011100010", Convert.ToString(1250, 2));
         Assert.Equal("4e2", Convert.ToString(1250, 16));
         Assert.Equal("000004E2", $"{1250:X8}");
