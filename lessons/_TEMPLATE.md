@@ -1,55 +1,48 @@
 <!--
-Writing rules for every lesson:
+Writing rules for every lesson.
+
+Content:
 - Visual first: every section has a diagram (Mermaid, `direction TB`), a chart (xychart-beta) or a trace table.
-- Short paragraphs: if a section is only text, add a visual or a pause.
-- At least two "⏸️ Pause and think" boxes, with the answer inside <details>.
+- At least two "Stop and think" questions, with the answer inside <details>.
 - Charts need explicit colors: %%{init: {"themeVariables": {"xyChart": {"plotColorPalette": "#2563eb"}}}}%%
 - Every number in the text must match the code, the tests or a real run.
-- Side topics that aren't the algorithm (money types, hashing, overflow...) go in the appendix: keep a 2–3 line
-  note in the lesson, followed by "🔎 Deep dive: [Appendix X — Title](../../appendix/X-title.md)".
+- Side topics that aren't the algorithm (money types, hashing, overflow...) go in the appendix: keep a 2 or 3
+  sentence explanation in the lesson, with a link to the appendix.
 - Public methods document every <param> and <returns>: what it means in the scenario, its unit, its constraints.
   The build enforces missing comments (GenerateDocumentationFile): keep it at 0 warnings.
+
+Style (plain and clear, like a colleague explaining at a whiteboard):
+- Short paragraphs of plain prose. Use a list only for real sequences of steps or real enumerations.
+- Tables only for data: traces, complexities, inputs and outputs, edge cases.
+- No em dashes, no emoji (also inside diagrams), no GitHub alert boxes.
+- Headings in sentence case: "## 5. A better idea", not "## 5. A Better Idea".
+- Bold only for a key term the first time it appears, if at all.
+- Plain "-" for minus, and words instead of arrows in sentences. The difficulty notation ★☆☆ → ★★☆ is the only arrow.
 -->
 
-# NN — Lesson Title
+# Lesson NN: Title
 
 | Difficulty | Module | Time |
 |------------|--------|------|
-| ★☆☆ Foundation / ★★☆ Intermediate / ★★★ Advanced — for two levels: `★☆☆ Foundation (sections 1–5) → ★★☆ Intermediate (sections 6–8)` | [N — Module name](../../README.md#module-n--module-name) | ~XX minutes |
+| ★☆☆ Foundation, ★★☆ Intermediate or ★★★ Advanced. For two levels: ★☆☆ Foundation (sections 1 to 5) → ★★☆ Intermediate (sections 6 to 8) | [Module N: Name](../../README.md#module-n-name) | about XX minutes |
 
-**Prerequisites:** lessons or concepts the reader needs (with links).
+**Prerequisites:** lessons or concepts the reader needs, with links.
 
-**You'll learn:** 2–4 bullet points with the takeaways of the lesson.
+One short paragraph with what the reader will learn.
 
----
+## 1. The problem
 
-## 1. The Problem
+A real-world situation first (why would anyone need this?), then the precise statement with input, output and constraints.
 
-A real-world scenario first (why would anyone need this?), then the precise statement with input, output and constraints.
+## 2. Before you start
 
-Example input → expected output.
+The questions to ask yourself (or the interviewer) before writing any code, with the answers for this problem: input size, duplicates, empty input, negative values...
 
-## 2. Before You Start
+## 3. Think first
 
-The questions to ask yourself (or the interviewer) before writing any code: input size, duplicates, empty input, can values be negative...
+Restate the exercise so it can be done without scrolling back: what to write, the method signature with a comment on each parameter (meaning and unit), and a table of inputs with the expected outputs, including an edge case.
 
-## 3. Think First
-
-Never just say "try to solve it": restate the exercise so it can be done without scrolling back.
-
-> [!IMPORTANT]
-> **Your task:** what to write, in one sentence.
->
-> ```csharp
-> // the method signature, with a comment on each parameter (meaning and unit)
-> ```
->
-> | Input | Expected output |
-> |-------|-----------------|
-> | the lesson's example | its result |
-> | an edge case | its result, with a short why |
-
-The goals, from "any correct solution" to the target complexity, then the hints:
+Then the goals, from "any correct solution" to the target complexity, and the hints:
 
 <details>
 <summary>Hint 1</summary>
@@ -65,15 +58,15 @@ A bigger nudge.
 
 </details>
 
-## 4. The Brute-Force Solution
+## 4. The brute-force solution
 
-The obvious approach, the code, why it's correct, and its complexity. Why it's not good enough.
+The obvious approach, the code, why it's correct and what it costs. Why it's not good enough.
 
-## 5. The Better Idea
+## 5. A better idea
 
-The key insight, explained with a vertical Mermaid diagram and/or a step-by-step trace table on a small example.
+The key insight, explained with a vertical Mermaid diagram and a step-by-step trace table on a small example.
 
-### ⏸️ Pause and think
+### Stop and think
 
 A question that checks the reader got the insight before seeing the code.
 
@@ -84,7 +77,7 @@ The answer, with a short explanation.
 
 </details>
 
-📌 **In a nutshell:** the insight in one sentence.
+In short: the insight in one sentence.
 
 ## 6. Implementation
 
@@ -97,17 +90,19 @@ The C# code (link to the file in `src/`), walked through section by section.
 | Brute force |      |       |     |
 | Optimized   |      |       |     |
 
-## 8. Edge Cases and Tests
+## 8. Edge cases and tests
 
 The cases that break naive solutions, and the tests that cover them (link to the file in `tests/`).
 
-## 9. Common Mistakes
+## 9. Common mistakes
 
-- Mistake → why it's wrong → how to avoid it.
+| Mistake | What happens | Fix |
+|---------|--------------|-----|
+|         |              |     |
 
 ## 10. In .NET
 
-Built-in types or methods that already solve (part of) the problem, and when to prefer them.
+Built-in types or methods that already solve the problem, or part of it, and when to prefer them.
 
 ## 11. Practice
 
@@ -115,10 +110,10 @@ Built-in types or methods that already solve (part of) the problem, and when to 
 2. ★★ A variation that changes one constraint
 3. ★★★ A harder follow-up
 
-## 🧠 Quick Check
+## Quick check
 
-3–4 questions, each with the answer in a `<details>` block.
+Three or four questions, each with the answer in a `<details>` block.
 
-## 📌 Summary
+## Summary
 
 A short vertical diagram with the key steps of the lesson, then a link to the next lesson.
