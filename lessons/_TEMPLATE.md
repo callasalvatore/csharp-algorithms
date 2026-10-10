@@ -8,6 +8,11 @@ Content:
 - Every number in the text must match the code, the tests or a real run.
 - Side topics that aren't the algorithm (money types, hashing, overflow...) go in the appendix: keep a 2 or 3
   sentence explanation in the lesson, with a link to the appendix.
+- Never take anything for granted. When something surprising happens (a number that prints oddly, a lookup
+  that fails), explain the mechanism step by step, down to the level where the reader can check it alone.
+  Every step must follow from the previous one: no "so" or "therefore" without the reasoning that leads there.
+  If a topic needs basics the reader may not have, put them in an earlier appendix and link to it.
+- Use real values, computed by code in the repo (and checked by tests), never values written from memory.
 - Public methods document every <param> and <returns>: what it means in the scenario, its unit, its constraints.
   The build enforces missing comments (GenerateDocumentationFile): keep it at 0 warnings.
 

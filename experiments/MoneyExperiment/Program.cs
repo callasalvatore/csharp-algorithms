@@ -1,4 +1,4 @@
-// Appendix A experiment: what happens to money stored as double, decimal and integer cents.
+// Appendix C experiment: what happens to money stored as double, decimal and integer cents.
 //
 //   dotnet run --project experiments/MoneyExperiment
 
