@@ -1,4 +1,4 @@
-# Appendix A: Money in code
+# Appendix C: Money in code
 
 | Referenced by | Prerequisites | Time |
 |---------------|---------------|------|
@@ -25,6 +25,8 @@ cents:   found positions 2 and 4
 There's no exception and no warning, just a wrong answer.
 
 ## 2. Why: base 2 can't write 0.1
+
+This section gives the short version. [Appendix A](A-numbers-in-binary.md) explains it from the beginning, starting from how numbers are written in base 2, up to how the 64 bits of a `double` are used.
 
 You know that 1/3 can't be written exactly in base 10: `0.3333...` goes on forever, and any finite number of digits is only an approximation.
 

@@ -1,4 +1,4 @@
-# Appendix E: How sorting works
+# Appendix G: How sorting works
 
 | Referenced by | Prerequisites | Time |
 |---------------|---------------|------|
