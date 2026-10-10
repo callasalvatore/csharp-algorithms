@@ -1,23 +1,14 @@
-# E — How Sorting Works
+# Appendix E: How sorting works
 
 | Referenced by | Prerequisites | Time |
 |---------------|---------------|------|
-| [Lesson 00 — Big-O](../lessons/00-big-o/README.md), [Lesson 01 — Two Sum](../lessons/01-two-sum/README.md) | [Lesson 00](../lessons/00-big-o/README.md) | ~25 minutes |
+| [Lesson 00](../lessons/00-big-o/README.md), [lesson 01](../lessons/01-two-sum/README.md) | [Lesson 00](../lessons/00-big-o/README.md) | about 25 minutes |
 
-**You'll learn:**
+Many lessons start with "sort the data first, then...". This appendix explains what that first step costs. We'll look at a simple way to sort, insertion sort, and see why it's O(n²). Then we'll see the divide and conquer idea behind merge sort and where its n log n comes from, what .NET really uses when you call `Array.Sort` or `OrderBy`, and when you can sort even faster than n log n.
 
-- a simple way to sort (insertion sort) and why it's O(n²)
-- the *divide and conquer* idea behind merge sort, and where the **n log n** comes from
-- what .NET actually uses when you call `Array.Sort` or `OrderBy`, and why the difference matters
-- when you can sort even faster than n log n
+## 1. The simple way: insertion sort
 
-Many lessons start with "sort the data first, then...". This appendix explains what that first step costs.
-
----
-
-## 1. The Simple Way: Insertion Sort
-
-Think of how you sort playing cards in your hand: you pick up one card at a time and **slide it into place** among the cards you're already holding.
+Think of how you sort playing cards in your hand: you pick up one card at a time and slide it into place among the cards you're already holding.
 
 ```csharp
 for (var i = 1; i < items.Length; i++)
@@ -33,39 +24,33 @@ for (var i = 1; i < items.Length; i++)
 }
 ```
 
-Trace on `[5, 2, 4, 1]` (the part before the `|` is already sorted):
+Here's the trace on `[5, 2, 4, 1]`. The part before the `|` is already sorted:
 
 | Step | Card picked | Hand after the step | Comparisons |
 |-----:|------------:|---------------------|------------:|
-| start | — | `5 \| 2 4 1` | — |
+| start |  | `5 \| 2 4 1` |  |
 | 1 | 2 | `2 5 \| 4 1` | 1 |
 | 2 | 4 | `2 4 5 \| 1` | 2 |
 | 3 | 1 | `1 2 4 5` | 3 |
 
-The card `1` had to slide past **every** card in the hand. In the worst case (reversed input) each new card does that, so the comparisons are 1 + 2 + 3 + … + (n − 1) ≈ n²/2: **O(n²)**.
+The last card, `1`, had to slide past every card in the hand. In the worst case, with reversed input, every new card does the same, so the comparisons are 1 + 2 + 3 + ... + (n - 1), about n²/2. That's O(n²).
 
-### ⏸️ Pause and think
+### Stop and think
 
-What happens if the input is **already sorted**?
+What happens if the input is already sorted?
 
 <details>
 <summary>Answer</summary>
 
-Each new card is compared once with the last card in the hand, finds it's already in the right place, and stops: **n − 1 comparisons, O(n)**. Insertion sort is very fast on data that's *almost* sorted, which is why real sorting algorithms still use it for small pieces of data.
+Each new card is compared once with the last card in the hand, turns out to be in the right place already, and stops there: n - 1 comparisons, so O(n). Insertion sort is very fast on data that's almost sorted, which is why real sorting algorithms still use it for small pieces of data.
 
 </details>
 
-The code is in [SortingExamples.cs](../src/Algorithms/Appendix/SortingExamples.cs); like the lesson examples, it also returns how many comparisons it made.
+The code is in [SortingExamples.cs](../src/Algorithms/Appendix/SortingExamples.cs). Like the examples in the lessons, it also returns the number of comparisons it made.
 
----
+## 2. Divide and conquer: merge sort
 
-## 2. Divide and Conquer: Merge Sort
-
-A completely different idea:
-
-1. **Split** the list in two halves.
-2. **Sort each half** the same way (split again, and again, until a piece has a single item: one item is always sorted).
-3. **Merge** the two sorted halves into one sorted list.
+Merge sort follows a completely different idea. It splits the list in two halves and sorts each half in the same way, splitting again and again until every piece has a single item (a single item is always sorted). Then it merges the sorted pieces back together.
 
 ```mermaid
 flowchart TB
@@ -83,7 +68,7 @@ flowchart TB
     I -->|merge| J
 ```
 
-**Merging is the clever part.** Both halves are already sorted, so the smallest remaining item is always at the **front** of one of them: compare the two fronts, take the smaller, repeat. Merging two halves with `n` items in total takes about `n` steps.
+Merging is the clever part. Both halves are already sorted, so the smallest remaining item is always at the front of one of them: you compare the two fronts, take the smaller one and repeat. Merging two halves with `n` items in total takes about `n` steps.
 
 ### Where n log n comes from
 
@@ -91,28 +76,26 @@ flowchart TB
 flowchart TB
     L1["Level 1: 1 list of n items"] --> L2["Level 2: 2 lists of n/2"]
     L2 --> L3["Level 3: 4 lists of n/4"]
-    L3 --> L4["… halving until every list has 1 item:<br/>about log₂ n levels"]
+    L3 --> L4["... halving until every list has 1 item:<br/>about log₂ n levels"]
     L4 --> T["Each level merges all n items:<br/>n work × log n levels = <b>O(n log n)</b>"]
 ```
 
-It's the same halving you saw in binary search ([lesson 00](../lessons/00-big-o/README.md#3-a-smarter-search-olog-n)): `n` can only be halved about log₂ n times.
+It's the same halving you saw in [binary search](../lessons/00-big-o/README.md#3-a-smarter-search-olog-n): `n` can only be halved about log₂ n times.
 
-### ⏸️ Pause and think
+### Stop and think
 
-How many levels of splitting does merge sort need for **1,000,000 items**?
+How many levels of splitting does merge sort need for 1,000,000 items?
 
 <details>
 <summary>Answer</summary>
 
-About **20**, because 2²⁰ ≈ 1,000,000. With about a million merge steps per level, that's around 20 million steps in total: compare that with ~500 billion for insertion sort's worst case.
+About 20, because 2²⁰ is about 1,000,000. With about a million merge steps per level, that's around 20 million steps in total, compared with about 500 billion in the worst case of insertion sort.
 
 </details>
 
----
+## 3. The difference in numbers
 
-## 3. The Difference in Numbers
-
-The [SortingExperiment](../experiments/SortingExperiment/Program.cs) counts the comparisons of both algorithms:
+The [SortingExperiment](../experiments/SortingExperiment/Program.cs) project counts the comparisons of both algorithms:
 
 ```bash
 dotnet run -c Release --project experiments/SortingExperiment
@@ -133,15 +116,13 @@ xychart-beta
     bar [0.01, 0.12, 24.88, 50.00]
 ```
 
-Insertion sort's cost depends **a lot** on the input: 9,999 comparisons if it's already sorted, almost 50 million if it's reversed. Merge sort does about the same work whatever the input looks like.
+The cost of insertion sort depends a lot on the input: 9,999 comparisons if it's already sorted, almost 50 million if it's reversed. Merge sort does about the same work whatever the input looks like.
 
----
+## 4. Quicksort, and what .NET really uses
 
-## 4. Quicksort, and What .NET Really Uses
+You'll often hear about quicksort. It picks an item, the pivot, moves the smaller items to its left and the bigger ones to its right, then sorts the two sides in the same way. On average it's O(n log n) and very fast in practice, but with unlucky pivots it degrades to O(n²).
 
-You'll often hear about **quicksort**: pick an item (the *pivot*), move the smaller items to its left and the bigger ones to its right, then sort the two sides the same way. On average it's O(n log n) and very fast in practice, but with unlucky pivots it degrades to O(n²).
-
-.NET combines the best of each algorithm into one, called **introsort**:
+.NET combines the strengths of these algorithms into one, called introsort:
 
 ```mermaid
 flowchart TB
@@ -153,28 +134,26 @@ flowchart TB
     D -->|no| P
 ```
 
-The result is O(n log n) **guaranteed**, with the speed of quicksort in the common case.
+The result is a guaranteed O(n log n), with the speed of quicksort in the common case.
 
 ### Stable or not? It matters
 
-A sort is **stable** if items with the same key keep their original order.
+A sort is stable if items with the same key keep their original order.
 
 | Method | Algorithm | Stable? |
 |--------|-----------|---------|
-| `Array.Sort`, `List<T>.Sort` | introsort | ❌ **no** |
-| `Enumerable.OrderBy` (LINQ) | stable sort | ✅ yes |
+| `Array.Sort`, `List<T>.Sort` | introsort | no |
+| `Enumerable.OrderBy` (LINQ) | stable sort | yes |
 
-Why you should care: your orders are already sorted by **date**, and you sort them by **amount**. With `OrderBy`, orders with the same amount stay in date order. With `List.Sort`, they may come out in any order. If you need a specific order for ties, say it explicitly: `orders.OrderBy(o => o.Amount).ThenBy(o => o.Date)`.
+Here's why it matters. Your orders are already sorted by date, and you sort them by amount. With `OrderBy`, orders with the same amount stay in date order; with `List.Sort` they can come out in any order. If you need a specific order for ties, say so explicitly: `orders.OrderBy(o => o.Amount).ThenBy(o => o.Date)`.
 
-📌 **In a nutshell:** for everyday code, call `Sort` or `OrderBy` and enjoy O(n log n). Choose `OrderBy` when the order of equal items matters.
+In short: in everyday code, call `Sort` or `OrderBy` and you get O(n log n). Choose `OrderBy` when the order of equal items matters.
 
----
+## 5. Can we sort faster than n log n?
 
-## 5. Can We Sort Faster Than n log n?
+Not by comparing items: it can be proven that any sort based only on comparisons needs about n log n comparisons in the worst case.
 
-Not by **comparing** items: it can be proven that any sort based only on comparisons needs about n log n comparisons in the worst case.
-
-But if the values are **small integers in a known range**, you don't need to compare them at all. Example: sorting a million customers by age (0 to 120). Count how many customers have each age, then write them out in order:
+But if the values are small integers in a known range, you don't need to compare them at all. Say you have to sort a million customers by age, from 0 to 120: you can count how many customers have each age, then write the ages out in order.
 
 ```mermaid
 flowchart TB
@@ -183,18 +162,16 @@ flowchart TB
     C --> D["O(n + k): n items, k possible values"]
 ```
 
-That's **counting sort**, and its cousin **bucket sort** is the key idea of [lesson 06 — Top K Frequent Elements](../README.md#module-3-heaps-and-priority-queues).
+This is counting sort. A close relative, bucket sort, is the key idea of lesson 06 on the top K frequent elements (see [Module 3](../README.md#module-3-heaps-and-priority-queues)).
 
----
+## Quick check
 
-## 🧠 Quick Check
-
-**1.** A list of 100,000 transactions is already sorted, and a few new ones are added at the end. Which of the two algorithms in this appendix would re-sort it faster?
+**1.** A list of 100,000 transactions is already sorted, and a few new ones are added at the end. Which of the two algorithms in this appendix would sort it again faster?
 
 <details>
 <summary>Answer</summary>
 
-**Insertion sort**: the 100,000 sorted items cost one comparison each, and only the few new ones have to slide into place. That's close to O(n). Merge sort would still do its full O(n log n).
+Insertion sort. The 100,000 sorted items cost one comparison each, and only the few new ones have to slide into place, so it's close to O(n). Merge sort would still do its full O(n log n).
 
 </details>
 
@@ -203,22 +180,20 @@ That's **counting sort**, and its cousin **bucket sort** is the key idea of [les
 <details>
 <summary>Answer</summary>
 
-**No**: `List<T>.Sort` is not stable, and the documentation says so. Use `OrderBy` (stable), or add a tie-breaker with `ThenBy`.
+No: `List<T>.Sort` isn't stable, and the documentation says so. Use `OrderBy`, which is stable, or add a tie-breaker with `ThenBy`.
 
 </details>
 
-**3.** What's the cost of `orders.OrderBy(o => o.Date).ToList()` on `n` orders?
+**3.** What does `orders.OrderBy(o => o.Date).ToList()` cost on `n` orders?
 
 <details>
 <summary>Answer</summary>
 
-**O(n log n)** time, plus O(n) memory for the new list.
+O(n log n) time, plus O(n) memory for the new list.
 
 </details>
 
----
-
-## 📌 Summary
+## Summary
 
 ```mermaid
 flowchart TB
@@ -228,4 +203,4 @@ flowchart TB
     D --> E["Small integer keys:<br/>counting sort, O(n + k)"]
 ```
 
-[← Back to the appendix index](README.md)
+[Back to the appendix index](README.md)
