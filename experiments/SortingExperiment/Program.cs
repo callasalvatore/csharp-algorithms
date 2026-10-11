@@ -1,4 +1,4 @@
-// Appendix E experiment: how many comparisons do insertion sort and merge sort make
+// Appendix G experiment: how many comparisons do insertion sort and merge sort make
 // on random, already sorted and reversed input?
 //
 //   dotnet run -c Release --project experiments/SortingExperiment

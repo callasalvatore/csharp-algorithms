@@ -31,7 +31,7 @@ flowchart TB
 
 Stated in general terms: given a list of amounts and a target, find two different items whose sum is exactly the target, and return their positions. If no such pair exists, say so.
 
-The code stores amounts in cents, so 1,250.00 EUR becomes the `int` `125000`. Money should never live in a `double`: in C#, `0.1 + 0.2 == 0.3` is false, and with `double` amounts this very algorithm can miss a pair that exists. Integer cents are exact, and they're also what you'll find in interview problems. [Appendix A](../../appendix/A-money-in-code.md) shows the bug in action, compares `double`, `decimal` and cents, and explains rounding and how to split an amount without losing a cent.
+The code stores amounts in cents, so 1,250.00 EUR becomes the `int` `125000`. Money should never live in a `double`: in C#, `0.1 + 0.2 == 0.3` is false, and with `double` amounts this very algorithm can miss a pair that exists. Integer cents are exact, and they're also what you'll find in interview problems. [Appendix C](../../appendix/C-money-in-code.md) shows the bug in action, compares `double`, `decimal` and cents, and explains rounding and how to split an amount without losing a cent.
 
 ## 2. Before you start
 
@@ -341,7 +341,7 @@ The tests do this for Two Sum (500 random inputs), 3Sum (300) and 4Sum (200).
 
 When you only need to know whether a pair exists, and not where it is, a `HashSet<T>` is enough.
 
-To sort, `Enumerable.Order()` (from .NET 7) and `Array.Sort` both take O(n log n). [Appendix E](../../appendix/E-how-sorting-works.md) explains where that cost comes from, and why `Array.Sort` and `OrderBy` don't treat equal items the same way.
+To sort, `Enumerable.Order()` (from .NET 7) and `Array.Sort` both take O(n log n). [Appendix G](../../appendix/G-how-sorting-works.md) explains where that cost comes from, and why `Array.Sort` and `OrderBy` don't treat equal items the same way.
 
 ## 13. Practice
 

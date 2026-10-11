@@ -137,7 +137,7 @@ Twice the items, twice the work: 1,000 steps for 1,000 items.
 orders.Sort();                          // or: orders.OrderBy(o => o.Date)
 ```
 
-Sorting costs a little more than reading every item once, `n` times `log n`: about 10,000 steps for 1,000 items. [Appendix E](../../appendix/E-how-sorting-works.md) explains how sorting works and why it costs exactly this much.
+Sorting costs a little more than reading every item once, `n` times `log n`: about 10,000 steps for 1,000 items. [Appendix G](../../appendix/G-how-sorting-works.md) explains how sorting works and why it costs exactly this much.
 
 ### O(n²): quadratic
 

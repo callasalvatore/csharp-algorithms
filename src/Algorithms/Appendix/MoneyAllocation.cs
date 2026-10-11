@@ -1,7 +1,7 @@
 namespace Algorithms.Appendix;
 
 /// <summary>
-/// Appendix A: splitting an amount of money into equal parts without losing or creating cents.
+/// Appendix C: splitting an amount of money into equal parts without losing or creating cents.
 /// </summary>
 public static class MoneyAllocation
 {

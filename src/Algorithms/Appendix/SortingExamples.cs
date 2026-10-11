@@ -1,7 +1,7 @@
 namespace Algorithms.Appendix;
 
 /// <summary>
-/// Appendix E: two classic ways to sort, returning how many comparisons they made
+/// Appendix G: two classic ways to sort, returning how many comparisons they made
 /// so their growth can be measured. For real code, use Array.Sort, List.Sort or OrderBy.
 /// </summary>
 public static class SortingExamples
