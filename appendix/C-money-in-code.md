@@ -1,8 +1,8 @@
 # Appendix C: Money in code
 
-| Referenced by | Prerequisites | Time |
-|---------------|---------------|------|
-| [Lesson 01](../lessons/01-two-sum/README.md) | none | about 20 minutes |
+| Prerequisites | Time |
+|---------------|------|
+| none | about 20 minutes |
 
 This appendix explains why `0.1 + 0.2 == 0.3` is false with `double`, and why that breaks real code. We'll compare the three ways to store money in C# and when to use each one, look at the rounding rule that surprises most developers, and see how to split an amount into installments without losing a cent.
 

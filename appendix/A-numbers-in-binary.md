@@ -121,7 +121,7 @@ flowchart TB
     C --> D["Written 0x000004E2 (0x marks a hexadecimal number)"]
 ```
 
-In C#, `$"{1250:X8}"` gives `"000004E2"`, and `Convert.ToString(1250, 16)` gives `"4e2"`. Appendix B uses hexadecimal to show what's really in memory.
+In C#, `$"{1250:X8}"` gives `"000004E2"`, and `Convert.ToString(1250, 16)` gives `"4e2"`.
 
 ### Stop and think
 
@@ -264,7 +264,7 @@ flowchart TB
     B -->|"gap 2⁻⁴³"| C["820.100000000000136424205265939235687255859375"]
 ```
 
-When a calculation produces a result that falls inside a gap, the processor has to round it to one of the two doubles around it. That's exactly what happens to `1250.30 - 430.20`, and appendix B follows that subtraction bit by bit.
+When a calculation produces a result that falls inside a gap, the processor has to round it to one of the two doubles around it.
 
 ### Stop and think
 
