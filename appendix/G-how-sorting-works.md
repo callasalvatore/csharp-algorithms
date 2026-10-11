@@ -1,8 +1,8 @@
 # Appendix G: How sorting works
 
-| Referenced by | Prerequisites | Time |
-|---------------|---------------|------|
-| [Lesson 00](../lessons/00-big-o/README.md), [lesson 01](../lessons/01-two-sum/README.md) | [Lesson 00](../lessons/00-big-o/README.md) | about 25 minutes |
+| Prerequisites | Time |
+|---------------|------|
+| [Lesson 00](../lessons/00-big-o/README.md) | about 25 minutes |
 
 Many lessons start with "sort the data first, then...". This appendix explains what that first step costs. We'll look at a simple way to sort, insertion sort, and see why it's O(n²). Then we'll see the divide and conquer idea behind merge sort and where its n log n comes from, what .NET really uses when you call `Array.Sort` or `OrderBy`, and when you can sort even faster than n log n.
 
