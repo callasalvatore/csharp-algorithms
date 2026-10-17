@@ -22,7 +22,7 @@ decimal: found positions 2 and 4
 cents:   found positions 2 and 4
 ```
 
-There's no exception and no warning, just a wrong answer.
+There's no exception and no warning, just a wrong answer. [Appendix B](B-floating-point-inside-the-machine.md) follows this exact subtraction inside the processor, bit by bit, and shows why the result is the double just below 820.10.
 
 ## 2. Why: base 2 can't write 0.1
 
