@@ -164,30 +164,52 @@ In short: don't search for the partner of each item, remember the items you've a
 
 ## 6. Variation: the list is already sorted
 
-Suppose the invoices come from a database query with `ORDER BY amount`. In that case we can avoid the dictionary and its O(n) memory, using two pointers: one starts on the smallest amount, the other on the largest.
+Suppose the invoices come from a database query with `ORDER BY amount`, so they're sorted from the smallest to the largest. In that case we can avoid the dictionary and its O(n) memory.
 
-```mermaid
-flowchart TB
-    S["left = smallest, right = largest"] --> E{"left < right?<br/>(still two different items)"}
-    E -->|yes| C{"amount[left] + amount[right]"}
-    E -->|no| N["No pair"]
-    C -->|"= target"| F["Found"]
-    C -->|"< target"| L["Too small:<br/>move left one step right"]
-    C -->|"> target"| R["Too big:<br/>move right one step left"]
-    L --> E
-    R --> E
+The technique is called two pointers. A pointer here is nothing more than a variable that holds a position in the list: `left` starts at the first position, on the smallest amount, and `right` at the last one, on the largest.
+
+Because the list is sorted, the two pointers work like two knobs:
+
+- moving `left` one step to the right picks a bigger amount, so the sum can only grow;
+- moving `right` one step to the left picks a smaller amount, so the sum can only shrink.
+
+So at every step we compare the sum of the two amounts with the target. If it's too small, we turn the first knob, if it's too big, the second one. Here's what happens with the sorted invoices and a transfer of 905.00 EUR (L is `left`, R is `right`):
+
+```
+position:   0       1       2       3       4
+amount:   155.00  310.00  430.00  475.00  820.00
+
+step 1:     L                               R     155 + 820 = 975   too big: R moves left
+step 2:     L                       R             155 + 475 = 630   too small: L moves right
+step 3:             L               R             310 + 475 = 785   too small: L moves right
+step 4:                     L       R             430 + 475 = 905   found: positions 2 and 3
 ```
 
-Here's the trace with the sorted invoices and a transfer of 905.00 EUR:
+If the two pointers meet without finding the target, there's no pair: when `left` and `right` are on the same position they point to the same invoice, and an invoice can't be paired with itself.
 
-| Step | Left   | Right  | Sum    | Decision |
-|-----:|-------:|-------:|-------:|----------|
-| 1    | 155.00 | 820.00 | 975.00 | too big, move right |
-| 2    | 155.00 | 475.00 | 630.00 | too small, move left |
-| 3    | 310.00 | 475.00 | 785.00 | too small, move left |
-| 4    | 430.00 | 475.00 | 905.00 | found |
+Without the step counter used by the tests, the code of [TwoSum.cs](../../src/Algorithms/Arrays/TwoSum.cs) follows the same steps:
 
-Every step discards one item, so there are at most `n - 1` steps: O(n) time and O(1) memory.
+```csharp
+var left = 0;
+var right = sortedAmounts.Count - 1;
+
+while (left < right)                      // still two different invoices
+{
+    var sum = (long)sortedAmounts[left] + sortedAmounts[right];
+
+    if (sum == target)
+        return new PairResult(left, right);
+
+    if (sum < target)
+        left++;                           // too small: take a bigger amount
+    else
+        right--;                          // too big: take a smaller amount
+}
+
+return null;                              // the pointers met: no pair
+```
+
+Every step moves one of the two pointers, so after at most `n - 1` steps they meet: O(n) time and O(1) memory, because we only keep two numbers.
 
 ### Stop and think
 
