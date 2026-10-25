@@ -6,7 +6,7 @@ Some topics come up in several lessons without being algorithms themselves, so t
 |---|-------|----------------|---------------|--------|
 | A | [Numbers in binary](A-numbers-in-binary.md) | positional notation, bits and bytes, hexadecimal, binary fractions, how a `double` is built | Appendices B and C | Ready |
 | B | [Floating point inside the machine](B-floating-point-inside-the-machine.md) | bytes in memory, CPU registers, the machine code of a subtraction, how it is rounded bit by bit | Appendix C | Ready |
-| C | [Money in code](C-money-in-code.md) | `double` vs `decimal` vs integer cents, rounding, splitting amounts | [Lesson 01](../lessons/01-two-sum/README.md) | Ready |
+| C | [Money in code](C-money-in-code.md) | `double` vs `decimal` vs integer cents, converting to cents, rounding, splitting amounts | [Lesson 01](../lessons/01-two-sum/README.md) | Ready |
 | D | How a dictionary works | hashing, buckets, collisions, why lookups are O(1) on average | Lessons 00 and 01 | Planned |
 | E | Integer overflow | how an `int` wraps around, `checked`, when to use `long` | Lessons 00 and 01 | Planned |
 | F | Testing against a brute force | slow but correct referees, random inputs with a fixed seed | Lesson 01 | Planned |

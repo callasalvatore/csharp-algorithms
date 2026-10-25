@@ -2,9 +2,9 @@
 
 | Prerequisites | Time |
 |---------------|------|
-| none | about 20 minutes |
+| none ([appendices A](A-numbers-in-binary.md) and [B](B-floating-point-inside-the-machine.md) explain the details) | about 20 minutes |
 
-This appendix explains why `0.1 + 0.2 == 0.3` is false with `double`, and why that breaks real code. We'll compare the three ways to store money in C# and when to use each one, look at the rounding rule that surprises most developers, and see how to split an amount into installments without losing a cent.
+This appendix is about the choices you make when your code handles money: which type to store amounts in, how to convert them, how to round them and how to split them without losing a cent. It starts from a real bug, then goes through the options C# gives you and the traps of each one.
 
 ## 1. The bug
 
@@ -22,25 +22,13 @@ decimal: found positions 2 and 4
 cents:   found positions 2 and 4
 ```
 
-There's no exception and no warning, just a wrong answer. [Appendix B](B-floating-point-inside-the-machine.md) follows this exact subtraction inside the processor, bit by bit, and shows why the result is the double just below 820.10.
+There's no exception and no warning, just a wrong answer.
 
-## 2. Why: base 2 can't write 0.1
+## 2. Why it happens, in short
 
-This section gives the short version. [Appendix A](A-numbers-in-binary.md) explains it from the beginning, starting from how numbers are written in base 2, up to how the 64 bits of a `double` are used.
+A `double` stores numbers in base 2, and most decimal amounts, like 0.10 or 430.20, have an infinite number of digits in base 2. The `double` keeps only the nearest value it can store, so almost every amount you write carries a tiny error ([appendix A](A-numbers-in-binary.md) shows how a `double` is built and why). When you compute with those values, the processor has to round each result to a value it can store, and the small errors can push the result to a neighbor of the number you expected ([appendix B](B-floating-point-inside-the-machine.md) follows the subtraction of this bug bit by bit).
 
-You know that 1/3 can't be written exactly in base 10: `0.3333...` goes on forever, and any finite number of digits is only an approximation.
-
-A `double` stores numbers in base 2, and in base 2 the same thing happens to 0.1:
-
-```mermaid
-flowchart TB
-    A["You write 0.1"] --> B["In binary it's 0.000110011001100...<br/>the pattern repeats forever"]
-    B --> C["A double keeps about 16 significant digits:<br/>it stores the nearest value it can,<br/>0.1000000000000000055511..."]
-    C --> D["Every amount carries a tiny error"]
-    D --> E["Sums and subtractions add the errors up:<br/>0.1 + 0.2 = 0.30000000000000004"]
-```
-
-When you print a `double`, .NET shows the shortest text that identifies it, so most of the time you see `0.1` and never notice anything. The error only shows up when you compare or accumulate values:
+Most of the time you don't notice, because .NET prints a `double` with the shortest text that identifies it. The errors show up when you compare values or add many of them:
 
 ```csharp
 Console.WriteLine(0.1 + 0.2 == 0.3);   // False
@@ -50,27 +38,16 @@ for (var i = 0; i < 10; i++) total += 0.10;
 Console.WriteLine(total);              // 0.9999999999999999
 ```
 
-### Stop and think
-
-Which of these values can a `double` store exactly: 0.5, 0.25, 0.1, 0.75?
-
-<details>
-<summary>Answer</summary>
-
-0.5, 0.25 and 0.75. They're sums of halves, quarters, eighths and so on (0.75 = 1/2 + 1/4), which are exactly the fractions base 2 can write. 0.1 is 1/10, which needs a factor of 5 that base 2 doesn't have, so it becomes an infinite pattern.
-
-</details>
-
-In short: a `double` isn't imprecise, it's binary, and most decimal amounts simply don't exist in binary.
+In short: with money, the problem isn't that a `double` is imprecise, it's that it's binary, and most amounts don't exist in binary.
 
 ## 3. The three options
 
 | | `double` | `decimal` | Integer minor units (`long`) |
 |---|---|---|---|
 | Example | `1250.30` | `1250.30m` | `125030` (cents) |
-| Base | 2 | 10 | integer |
+| How it's stored | a binary fraction (base 2) | a whole number and how many digits are decimals (base 10) | a whole number of cents |
 | `0.10 + 0.20 == 0.30` | false | true | true (`10 + 20 == 30`) |
-| Speed | fast | slower, but fast enough for business code | fast |
+| Speed | fast: the processor has instructions for it | slower: the processor has no instructions for base 10, so .NET does the arithmetic in software | fast: integer instructions |
 | Typical use | science, graphics, statistics | business code in .NET, `decimal` database columns | payment APIs, systems written in several languages, algorithms |
 
 ```mermaid
@@ -81,11 +58,13 @@ flowchart TB
     Q2 -->|no| M["decimal"]
 ```
 
-## 4. `decimal`: exact for decimal fractions
+## 4. `decimal`: exact for decimal amounts
 
-`decimal` stores numbers in base 10, with 28 or 29 significant digits. Amounts like 0.10 or 1,250.30 are stored exactly, so sums and comparisons behave as you'd expect.
+A `decimal` doesn't store a binary fraction. It stores a whole number, up to 96 bits long, together with a scale: how many of its digits come after the point. `1250.30m` is stored as the whole number 125030 with a scale of 2, meaning "125030, with the point two digits from the right". You can see it with `decimal.GetBits(1250.30m)`, which returns `[125030, 0, 0, 131072]`: the first three numbers are the 96 bits of the whole number, and in the last one the scale 2 sits in the third byte (2 × 65,536 = 131,072).
 
-It isn't magic, though. Divisions can still be inexact: `1m / 3m` is `0.3333333333333333333333333333`, so when you divide money it's up to you to decide how to round and where the leftover goes (we'll see how in [section 6](#6-splitting-money-without-losing-a-cent)). And the default rounding isn't the one you learned at school.
+Since the digits are decimal digits, amounts like 0.10 or 1,250.30 are stored exactly, and sums and comparisons behave as you'd expect. The largest whole number that fits in 96 bits is 79,228,162,514,264,337,593,543,950,335: that's why a `decimal` has 28 or 29 significant digits.
+
+It isn't magic, though. Divisions can still be inexact: `1m / 3m` is `0.3333333333333333333333333333`, so when you divide money it's up to you to decide how to round and where the leftover goes (section 6 shows how). And the default rounding isn't the one you learned at school.
 
 ### The rounding surprise
 
@@ -95,7 +74,7 @@ Math.Round(3.5m)                                    // 4
 Math.Round(2.5m, MidpointRounding.AwayFromZero)     // 3
 ```
 
-By default `Math.Round` uses "round half to even", also called banker's rounding: a value exactly halfway goes to the nearest even number. Over many operations this avoids a systematic upward bias. Most invoices and business rules, however, expect "half away from zero" (2.5 becomes 3), so pass `MidpointRounding.AwayFromZero` explicitly and check the rules of your country and domain.
+By default `Math.Round` uses "round half to even", also called banker's rounding: a value exactly halfway goes to the nearest even number. It's the same rule the processor uses for doubles ([appendix B](B-floating-point-inside-the-machine.md#5-rounding-the-bit-that-doesnt-fit) explains why it avoids a systematic upward drift). Most invoices and business rules, however, expect "half away from zero", where 2.5 becomes 3, so pass `MidpointRounding.AwayFromZero` explicitly and check the rules of your country and domain.
 
 ### Stop and think
 
@@ -112,19 +91,39 @@ What's `Math.Round(0.125m, 2)`? And with `MidpointRounding.AwayFromZero`?
 
 The other approach avoids fractions entirely: you store the amount as a whole number of the smallest unit of the currency, its minor unit. So 1,250.30 EUR becomes `125030` cents. Integer arithmetic is exact and fast, and integers look the same in every language and database, which is why many payment APIs exchange amounts this way.
 
-```mermaid
-flowchart TB
-    I["The user types 1,250.30"] --> P["Parse it as a decimal<br/>(never as a double)"]
-    P --> X["Convert it once to minor units:<br/>125030"]
-    X --> W["Do all the calculations on long values"]
-    W --> O["Divide by 100 only to display it:<br/>1,250.30 EUR"]
+The conversion to cents has to happen without going through a `double`. Look at what happens to a price of 19.99 EUR:
+
+```csharp
+double price = 19.99;
+long cents = (long)(price * 100);    // 1998, not 1999
 ```
 
-There are two things to watch out for. The first is that not every currency has two decimals. The ISO 4217 standard defines the minor unit of each currency: the euro has 2 decimals, the Japanese yen (JPY) has none and the Kuwaiti dinar (KWD) has 3. Always store the currency code together with the amount, and convert using its number of decimals.
+19.99 isn't stored exactly, so `price * 100` gives 1998.9999999999998, and the cast to `long` doesn't round: it cuts off everything after the point, leaving 1998. One cent has disappeared. With `decimal.Parse("19.99") * 100` you get exactly 1999, because the `decimal` holds 19.99 exactly. This is the safe path:
+
+```mermaid
+flowchart TB
+    I["The user types 19.99"] --> P["Parse it as a decimal<br/>(never as a double)"]
+    P --> X["Convert it once to minor units:<br/>1999"]
+    X --> W["Do all the calculations on long values"]
+    W --> O["Divide by 100 only to display it:<br/>19.99 EUR"]
+```
+
+There are two more things to watch out for. The first is that not every currency has two decimals. The ISO 4217 standard defines the minor unit of each currency: the euro has 2 decimals, the Japanese yen (JPY) has none and the Kuwaiti dinar (KWD) has 3. Always store the currency code together with the amount, and convert using its number of decimals.
 
 The second is overflow. An `int` holds at most 2,147,483,647 cents, about 21.5 million EUR, and a single large invoice or a yearly total can go beyond that. A `long` goes up to about 92 quadrillion EUR in cents.
 
 Lesson 01 uses `int` cents to keep the code close to the classic interview problem, and computes every sum as a `long` to avoid overflow. In production code, store the amounts themselves as `long`.
+
+### Stop and think
+
+Would `(long)Math.Round(price * 100)` have given the right result for 19.99?
+
+<details>
+<summary>Answer</summary>
+
+Yes: `Math.Round(1998.9999999999998)` is 1999, so rounding instead of cutting fixes this case. It's still a patch, though: the amount went through a `double` and could carry other errors. Parsing it as a `decimal` from the start avoids the problem entirely.
+
+</details>
 
 ## 6. Splitting money without losing a cent
 
@@ -160,7 +159,7 @@ How does `Split` divide 0.10 EUR among 3 people?
 
 ## 7. Try it
 
-The [MoneyExperiment](../experiments/MoneyExperiment/Program.cs) project runs everything shown in this appendix:
+The [MoneyExperiment](../experiments/MoneyExperiment/Program.cs) project runs the main examples of this appendix:
 
 ```bash
 dotnet run --project experiments/MoneyExperiment
@@ -192,6 +191,8 @@ dotnet run --project experiments/MoneyExperiment
    Split:  33.34 + 33.33 + 33.33 = 100.00
 ```
 
+The other numbers quoted here, such as the bits of `1250.30m` and the 1998 cents, are checked by the [tests](../tests/Algorithms.Tests/Appendix/MoneyInCodeTests.cs).
+
 ## Quick check
 
 **1.** You're adding a `Price` property to a C# entity saved in SQL Server. Which type would you use?
@@ -212,7 +213,16 @@ Dictionary lookups need exact equality. Two `double` values that should be equal
 
 </details>
 
-**3.** How does `MoneyAllocation.Split` divide 1,000.00 EUR into 7 installments?
+**3.** A price arrives from a web form as the text `"0.29"`. How do you turn it into cents?
+
+<details>
+<summary>Answer</summary>
+
+`decimal.Parse("0.29", CultureInfo.InvariantCulture) * 100`, which gives exactly 29, then convert it to `long`. Going through a `double`, `(long)(0.29 * 100)` gives 28, because 0.29 × 100 is 28.999999999999996 as a `double`.
+
+</details>
+
+**4.** How does `MoneyAllocation.Split` divide 1,000.00 EUR into 7 installments?
 
 <details>
 <summary>Answer</summary>
@@ -227,8 +237,9 @@ Dictionary lookups need exact equality. Two `double` values that should be equal
 flowchart TB
     A["Never store money in a double"] --> B["In C#, use decimal"]
     B --> C["Or integer minor units in a long,<br/>with the currency code"]
-    C --> D["Round explicitly:<br/>MidpointRounding.AwayFromZero"]
-    D --> E["When splitting, give the leftover cents<br/>to some parts: the total must not change"]
+    C --> D["Convert to cents from a decimal,<br/>never from a double"]
+    D --> E["Round explicitly:<br/>MidpointRounding.AwayFromZero"]
+    E --> F["When splitting, give the leftover cents<br/>to some parts: the total must not change"]
 ```
 
 [Back to the appendix index](README.md)
