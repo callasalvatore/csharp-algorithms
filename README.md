@@ -112,8 +112,8 @@ Some topics come up in several lessons without being algorithms themselves. They
 
 | | Topic | Status |
 |---|-------|--------|
-| A | [Numbers in binary](appendix/A-numbers-in-binary.md): positional notation, bits, bytes, binary fractions, how a `double` is built | In progress |
-| B | Floating point inside the machine: bytes in memory, CPU registers, how a subtraction is rounded | Planned |
+| A | [Numbers in binary](appendix/A-numbers-in-binary.md): positional notation, bits, bytes, binary fractions, how a `double` is built | Ready |
+| B | [Floating point inside the machine](appendix/B-floating-point-inside-the-machine.md): bytes in memory, CPU registers, how a subtraction is rounded | Ready |
 | C | [Money in code](appendix/C-money-in-code.md): `double` vs `decimal` vs integer cents, rounding, splitting amounts | Ready |
 | D | How a dictionary works: hashing, collisions, why lookups are O(1) on average | Planned |
 | E | Integer overflow: how an `int` wraps around, `checked`, when to use `long` | Planned |
